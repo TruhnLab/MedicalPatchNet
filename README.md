@@ -242,7 +242,7 @@ The performance differences reflect this methodological distinction rather than 
 If you use MedicalPatchNet in your research, please cite our work:
 
 ```bibtex
-@misc{wienholt2025medicalpatchnetpatchbasedselfexplainableai,
+@misc{wienholt2025medicalpatchnet,
       title={MedicalPatchNet: A Patch-Based Self-Explainable AI Architecture for Chest X-ray Classification}, 
       author={Patrick Wienholt and Christiane Kuhl and Jakob Nikolas Kather and Sven Nebelung and Daniel Truhn},
       year={2025},
