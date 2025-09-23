@@ -9,7 +9,7 @@
 MedicalPatchNet is a self-explainable deep learning architecture designed for chest X-ray classification that provides transparent and interpretable predictions without relying on post-hoc explanation methods. Unlike traditional black-box models that require external tools like Grad-CAM for interpretability, MedicalPatchNet integrates explainability directly into its architectural design.
 The architecture divides chest X-ray images into patches, processes each patch independently using EfficientNet-B0, and aggregates predictions through averaging.
 
-You can find the paper here: [TODO ADD LINK]
+You can find the paper here: [arxiv.org/abs/2509.07477](https://arxiv.org/abs/2509.07477)
 
 ### Key Features
 
@@ -242,7 +242,15 @@ The performance differences reflect this methodological distinction rather than 
 If you use MedicalPatchNet in your research, please cite our work:
 
 ```bibtex
-[TODO ADD CITATION]
+@misc{wienholt2025medicalpatchnetpatchbasedselfexplainableai,
+      title={MedicalPatchNet: A Patch-Based Self-Explainable AI Architecture for Chest X-ray Classification}, 
+      author={Patrick Wienholt and Christiane Kuhl and Jakob Nikolas Kather and Sven Nebelung and Daniel Truhn},
+      year={2025},
+      eprint={2509.07477},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2509.07477}, 
+}
 ```
 
 ---
