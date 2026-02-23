@@ -7,14 +7,14 @@
 ## Overview
 
 MedicalPatchNet is a self-explainable deep learning architecture designed for chest X-ray classification that provides transparent and interpretable predictions without relying on post-hoc explanation methods. Unlike traditional black-box models that require external tools like Grad-CAM for interpretability, MedicalPatchNet integrates explainability directly into its architectural design.
-The architecture divides chest X-ray images into patches, processes each patch independently using EfficientNet-B0, and aggregates predictions through averaging.
+The architecture divides chest X-ray images into patches, processes each patch independently using EfficientNetV2-S, and aggregates predictions through averaging.
 
-You can find the paper here: [arxiv.org/abs/2509.07477](https://arxiv.org/abs/2509.07477)
+You can find the paper here: [nature.com/articles/s41598-026-40358-0](https://www.nature.com/articles/s41598-026-40358-0). <br/> or the preprint here: [arxiv.org/abs/2509.07477](https://arxiv.org/abs/2509.07477).
 
 ### Key Features
 
 - **Self-explainable by design**: No need for external interpretation methods like Grad-CAM
-- **Competitive performance**: Achieves comparable classification accuracy to standard EfficientNet-B0 (AUROC: 0.902 vs 0.911)
+- **Competitive performance**: Achieves comparable classification accuracy to standard EfficientNetV2-S (AUROC: 0.902 vs 0.911)
 - **Superior localization**: Significantly outperforms Grad-CAM variants in pathology localization tasks (mean hit rate: 0.485 vs 0.376)
 - **Clinical relevance**: Designed specifically for medical imaging applications where interpretability is essential
 - **Faithful explanations**: Saliency maps directly reflect the model's true reasoning, not post-hoc approximations
@@ -99,9 +99,9 @@ $ ./runTraining.sh
 
 - **Image Resolution**: 512×512 pixels
 - **Patch Configuration**: 8×8 patches (64×64 pixels each)
-- **Backbone**: EfficientNet-B0 with ImageNet-1k pretraining
+- **Backbone**: EfficientNetV2-S with ImageNet-1k pretraining
 - **Optimizer**: AdamW with OneCycle learning rate schedule
-- **Training Duration**: 20 epochs (~4h in total on NVIDIA H100; similar to EfficientNet-B0)
+- **Training Duration**: 20 epochs (~4h in total on NVIDIA H100; similar to EfficientNetV2-S)
 - **Hardware Requirements**: 6GB VRAM is sufficient for configuration in `runTraining.sh`. We used NVIDIA H100 (94GB VRAM) for training.
 
 ---
@@ -114,7 +114,7 @@ You can also directly download them here:
 
 [**MedicalPatchNet**](https://huggingface.co/patrick-w/MedicalPatchNet/resolve/main/MedicalPatchNet_weights.pt)
 
-[**EfficientNet-B0**](https://huggingface.co/patrick-w/MedicalPatchNet/resolve/main/EfficientNetB0_weights.pt) (baseline; used for Grad-CAM, Grad-CAM++, and Eigen-CAM)
+[**EfficientNetV2-S**](https://huggingface.co/patrick-w/MedicalPatchNet/resolve/main/EfficientNetV2S_weights.pt) (baseline; used for Grad-CAM, Grad-CAM++, and Eigen-CAM)
 
 Download the weights and place them in the `savedModels` directory for evaluation.
 
@@ -132,7 +132,7 @@ To evaluate on our trained models, use:
 
 Classification performance is evaluated automatically at the end of training (see [`trainClassification.py`](trainClassification.py#L288)).
 
-> **Note**: The evaluation code is tailored for the final versions of MedicalPatchNet and EfficientNet-B0.
+> **Note**: The evaluation code is tailored for the final versions of MedicalPatchNet and EfficientNetV2-S.
 
 **Key Metrics**:
 - **AUROC** (Area Under ROC Curve)
@@ -171,14 +171,14 @@ For pathology localization assessment, we use the CheXlocalize evaluation code:
 
 ![AUROC Comparison](figures/auroc_comparison.png)
 
-**Figure 1**: Comparison of the Area Under the Receiver Operating Characteristic (AUROC) curves for MedicalPatchNet and EfficientNet-B0, indicating similar classification performance. On the CheXlocalize dataset, both models yield mean AUROCs of 0.907 and 0.908, respectively; for the full 14-class CheXpert dataset, AUROCs are 0.902 and 0.911, respectively. (*) Note: The *Lung Opacity* class in CheXpert is termed *Airspace Opacity* in CheXlocalize.
+**Figure 1**: Comparison of the Area Under the Receiver Operating Characteristic (AUROC) curves for MedicalPatchNet and EfficientNetV2-S, indicating similar classification performance. On the CheXlocalize dataset, both models yield mean AUROCs of 0.907 and 0.908, respectively; for the full 14-class CheXpert dataset, AUROCs are 0.902 and 0.911, respectively. (*) Note: The *Lung Opacity* class in CheXpert is termed *Airspace Opacity* in CheXlocalize.
 
-**Table 1**: Performance comparison between MedicalPatchNet and EfficientNet-B0. The metrics represent average values computed across the 10 classes from the CheXlocalize dataset (*) and across all 14 classes from the CheXpert dataset (All).
+**Table 1**: Performance comparison between MedicalPatchNet and EfficientNetV2-S. The metrics represent average values computed across the 10 classes from the CheXlocalize dataset (*) and across all 14 classes from the CheXpert dataset (All).
 
 | Model           | AUROC (*)| AUROC (All) | Accuracy (*)| Accuracy (All) | Sensitivity (*)| Sensitivity (All) | Specificity (*)| Specificity (All) |
 |:----------------|:--------:|:-----------:|:-----------:|:--------------:|:--------------:|:-----------------:|:--------------:|:-----------------:|
 | MedicalPatchNet |  0.907   |    0.902    |  **0.836**  |   **0.848**    |     0.825      |       0.763       |   **0.841**    |     **0.851**     |
-| EfficientNet-B0 |**0.908** |  **0.911**  |    0.823    |     0.843      |   **0.834**    |     **0.798**     |     0.826      |       0.844       |
+| EfficientNetV2-S |**0.908** |  **0.911**  |    0.823    |     0.843      |   **0.834**    |     **0.798**     |     0.826      |       0.844       |
 | Difference      |  -0.001  |   -0.009    |    0.013    |     0.005      |     -0.009     |      -0.035       |     0.015      |       0.007       |
 
 ### Explainability Comparison
@@ -206,13 +206,13 @@ Our patch-based approach provides superior localization compared to traditional 
 
 | Pathology         | MedicalPatchNet (Scaled) | MedicalPatchNet (Raw) | Grad-CAM | Grad-CAM++ | Eigen-CAM |
 |:------------------|:------------------------:|:---------------------:|:--------:|:----------:|:---------:|
-| Airspace Opacity  |        **0.493**         |         0.395         | <u>0.424</u>  |   0.414    |   0.376   |
 | Atelectasis       |        **0.490**         |         0.389         | <u>0.406</u>  |   0.367    |   0.373   |
 | Cardiomegaly      |        **0.464**         |         0.269         | <u>0.376</u>  |   0.246    |   0.217   |
 | Consolidation     |        **0.540**         |         0.482         | <u>0.516</u>  |   0.401    |   0.433   |
 | Edema             |        <u>0.648</u>         |         0.601         | **0.650**|   0.471    |   0.518   |
 | Enlarged Card.    |        **0.419**         |         0.320         | <u>0.392</u>  |   0.349    |   0.322   |
 | Lung Lesion       |          0.281           |       **0.564**       |  0.216   |   0.284    | <u>0.354</u>   |
+| Lung Opacity  |        **0.493**         |         0.395         | <u>0.424</u>  |   0.414    |   0.376   |
 | Pleural Effusion  |        **0.466**         |       <u>0.372</u>       |  0.308   |   0.293    |   0.207   |
 | Pneumothorax      |        <u>0.498</u>         |       **0.794**       |  0.195   |   0.195    |   0.097   |
 | Support Devices   |        <u>0.409</u>         |       **0.668**       |  0.272   |   0.225    |   0.130   |
@@ -229,7 +229,7 @@ Our patch-based approach provides superior localization compared to traditional 
 
 Our results differ from those reported in the original CheXlocalize paper due to methodological differences:
 
-**Our approach**: We trained single models (one MedicalPatchNet and one EfficientNet-B0) and evaluated their individual performance.
+**Our approach**: We trained single models (one MedicalPatchNet and one EfficientNetV2-S) and evaluated their individual performance.
 
 **CheXlocalize paper approach**: The authors trained 120 checkpoints for each of their 3 tested models, selected the top 10 performing checkpoints per pathology, and created ensemble models from these selections. This ensemble approach naturally yields superior performance compared to single model evaluation [[1]](https://doi.org/10.1038/s42256-022-00536-x).
 
@@ -242,14 +242,12 @@ The performance differences reflect this methodological distinction rather than 
 If you use MedicalPatchNet in your research, please cite our work:
 
 ```bibtex
-@misc{wienholt2025medicalpatchnet,
-      title={MedicalPatchNet: A Patch-Based Self-Explainable AI Architecture for Chest X-ray Classification}, 
-      author={Patrick Wienholt and Christiane Kuhl and Jakob Nikolas Kather and Sven Nebelung and Daniel Truhn},
-      year={2025},
-      eprint={2509.07477},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2509.07477}, 
+@article{wienholt2026medicalpatchnet,
+  title={MedicalPatchNet: a patch-based self-explainable AI architecture for chest X-ray classification},
+  author={Wienholt, Patrick and Kuhl, Christiane and Kather, Jakob Nikolas and Nebelung, Sven and Truhn, Daniel},
+  journal={Scientific Reports},
+  year={2026},
+  publisher={Nature Publishing Group UK London}
 }
 ```
 
