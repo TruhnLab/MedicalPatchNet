@@ -32,7 +32,7 @@ class ScalePatchNet(nn.Module):
         rawPatchLogits = self.forwardRawPatches(x)
         globalLogits = torch.mean(rawPatchLogits,dim=1)
         globalProb = torch.nn.functional.sigmoid(globalLogits)
-        globalProb = globalProb.unsqueeze(1).unsqueeze(2)
+        globalProb = globalProb.unsqueeze(1)
         scaledPatches = rawPatchLogits * globalProb
         return scaledPatches
 
